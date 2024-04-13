@@ -46,6 +46,7 @@
 -- version 003 Jan 2006 release, general tidy up
 -- version 004 spartan3e release
 -- version 005 simplified logic, uses only one RAMB
+-- version 005 4-2024 (Red~Bote) modified clock enables based on scramble_dblscan.vhd
 library ieee;
 	use ieee.std_logic_1164.all;
 	use ieee.std_logic_unsigned.all;
@@ -69,12 +70,12 @@ entity VGA_SCANDBL is
 		O_VSYNC          : out std_logic;
 		--
 		CLK              : in  std_logic;
-		CLK_X2           : in  std_logic
+		ENA              : in  std_logic;
+		ENA_X2           : in  std_logic
 	);
 end;
 
 architecture RTL of VGA_SCANDBL is
-	signal CLK_DUP     : std_logic := '0';
 	--
 	-- input timing
 	--
@@ -109,7 +110,7 @@ begin
 		ADDRA(9)          => bank_i,
 		ADDRA(8 downto 0) => hpos_i,
 		WEA               => '1',
-		ENA               => '1',
+		ENA               => ENA,
 		SSRA              => '0',
 		CLKA              => CLK,
 
@@ -122,78 +123,83 @@ begin
 		ADDRB(9)          => bank_o,
 		ADDRB(8 downto 0) => hpos_o,
 		WEB               => '0',
-		ENB               => '1',
+		ENB               => ENA_X2,
 		SSRB              => '0',
-		CLKB              => CLK_X2
+		CLKB              => CLK
 	);
 
-CLK_DUP <= CLK;
-p_input_timing : process(CLK_DUP)
+p_input_timing : process(CLK, ENA)
 	variable rising_h : boolean;
 	variable rising_v : boolean;
 begin
-	if rising_edge (CLK_DUP) then
-		ihs_t1 <= I_HSYNC;
-		ivs_t1 <= I_VSYNC;
-		rising_h := (I_HSYNC = '1') and (ihs_t1 = '0');
-		rising_v := (I_VSYNC = '1') and (ivs_t1 = '0');
+	if rising_edge (CLK) then
+		if (ENA = '1') then
+			ihs_t1 <= I_HSYNC;
+			ivs_t1 <= I_VSYNC;
+			rising_h := (I_HSYNC = '1') and (ihs_t1 = '0');
+			rising_v := (I_VSYNC = '1') and (ivs_t1 = '0');
 
-		if rising_v then
-			bank_i <= '0';
-		elsif rising_h then
-			bank_i <= not bank_i;
-		end if;
+			if rising_v then
+				bank_i <= '0';
+			elsif rising_h then
+				bank_i <= not bank_i;
+			end if;
 
-		if rising_h then
-			hpos_i <= (others => '0');
-			hsize_i <= hpos_i;
-		else
-			hpos_i <= hpos_i + "1";
-		end if;
-	end if;
-end process;
-
-p_output_timing : process(CLK_X2)
-	variable rising_h : boolean;
-	variable rising_v : boolean;
-begin
-	if rising_edge (CLK_X2) then
-		ohs_t1 <= I_HSYNC;
-		ovs_t1 <= I_VSYNC;
-		rising_h := (I_HSYNC = '1') and (ohs_t1 = '0');
-		rising_v := (I_VSYNC = '1') and (ovs_t1 = '0');
-
-		if rising_h or (hpos_o = hsize_i) then
-			hpos_o <= (others => '0');
-		else
-			hpos_o <= hpos_o + "1";
-		end if;
-
-		if rising_v then
-			bank_o <= '1';
-			vs_cnt <= (others => '0');
-		elsif rising_h then
-			bank_o <= not bank_o;
-			if (vs_cnt(2) = '0') then
-				vs_cnt <= vs_cnt + "1";
+			if rising_h then
+				hpos_i <= (others => '0');
+				hsize_i <= hpos_i;
+			else
+				hpos_i <= hpos_i + "1";
 			end if;
 		end if;
 	end if;
 end process;
 
-p_output : process(CLK_X2)
+p_output_timing : process(CLK, ENA_X2)
+	variable rising_h : boolean;
+	variable rising_v : boolean;
 begin
-	if rising_edge (CLK_X2) then
-		O_VSYNC <= not vs_cnt(2);
-		if (hpos_o < 32) then
-			O_HSYNC <= '1';
-		else
-			O_HSYNC <= '0';
-		end if;
+	if rising_edge(CLK) then
+		if (ENA_X2 = '1') then
+			ohs_t1 <= I_HSYNC;
+			ovs_t1 <= I_VSYNC;
+			rising_h := (I_HSYNC = '1') and (ohs_t1 = '0');
+			rising_v := (I_VSYNC = '1') and (ovs_t1 = '0');
 
-		O_B <= rgb_out(7 downto 6);
-		O_G <= rgb_out(5 downto 3);
-		O_R <= rgb_out(2 downto 0);
+			if rising_h or (hpos_o = hsize_i) then
+				hpos_o <= (others => '0');
+			else
+				hpos_o <= hpos_o + "1";
+			end if;
+
+			if rising_v then
+				bank_o <= '1';
+				vs_cnt <= (others => '0');
+			elsif rising_h then
+				bank_o <= not bank_o;
+				if (vs_cnt(2) = '0') then
+					vs_cnt <= vs_cnt + "1";
+				end if;
+			end if;
+		end if;
+	end if;
+end process;
+
+p_output : process(CLK, ENA_X2)
+begin
+	if rising_edge (CLK) then
+		if (ENA_X2 = '1') then
+			O_VSYNC <= not vs_cnt(2);
+			if (hpos_o < 32) then
+				O_HSYNC <= '1';
+			else
+				O_HSYNC <= '0';
+			end if;
+
+			O_B <= rgb_out(7 downto 6);
+			O_G <= rgb_out(5 downto 3);
+			O_R <= rgb_out(2 downto 0);
+		end if;
 
 	end if;
 end process;

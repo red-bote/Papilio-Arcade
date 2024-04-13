@@ -64,10 +64,10 @@ entity PACMAN is
     O_AUDIO_L             : out   std_logic;
     O_AUDIO_R             : out   std_logic;
     --
-	 I_JOYSTICK_A            : in    std_logic_vector(4 downto 0);
-	 I_JOYSTICK_B            : in    std_logic_vector(4 downto 0);
-	 JOYSTICK_A_GND			 : out	 std_logic;
-	 JOYSTICK_B_GND			 : out	 std_logic;
+	I_JOYSTICK_A            : in    std_logic_vector(4 downto 0);
+	I_JOYSTICK_B            : in    std_logic_vector(4 downto 0);
+	JOYSTICK_A_GND			 : out	 std_logic;
+	JOYSTICK_B_GND			 : out	 std_logic;
 	 
     I_SW                  : in    std_logic_vector(3 downto 0); -- active high
     O_LED                 : out   std_logic_vector(2 downto 0);
@@ -79,11 +79,9 @@ end;
 
 architecture RTL of PACMAN is
 
+    constant HWSEL_PACMANICMINERMAN : boolean := false ; -- p2 joystick right used for jump, collides with default config.
 
-	constant HWSEL_PACMANICMINERMAN : boolean := false ; -- p2 joystick right used for jump, collides with default config.
-																			
-    
-	 signal I_RESET_L        : std_logic;
+    signal I_RESET_L        : std_logic;
     signal reset            : std_logic;
     signal clk_ref          : std_logic;
     signal clk              : std_logic;
@@ -177,9 +175,8 @@ architecture RTL of PACMAN is
     --
     signal audio            : std_logic_vector(7 downto 0);
     signal audio_pwm        : std_logic;
-	 
-    signal scan_converter_mode        : std_logic;
 
+    signal scan_converter_mode        : std_logic;
 
 begin
   I_RESET_L <= not I_RESET;
@@ -680,8 +677,9 @@ begin
       O_HSYNC      => hsync_x2,
       O_VSYNC      => vsync_x2,
       --
-      CLK          => ena_6,
-      CLK_X2       => ena_12
+      CLK          => clk,
+      ENA          => ena_6, -- CLK
+      ENA_X2       => ena_12 -- CLK_X2
     );
 
 	scan_converter_mode <= '1';
