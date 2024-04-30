@@ -627,14 +627,14 @@ begin
       DATA        => program_rom_dinl
       );
 
---	Commented out for use on the Papilio board so ROMs can be merged into the bitstream. Not enough BRAM to include this for the Papilio One.
---  u_program_wiz : entity work.ROM_PGM_1
---    port map (
---      CLK         => clk,
---      ENA         => ena_6,
---      ADDR        => cpu_addr(12 downto 0),
---      DATA        => program_rom_dinh
---      );
+  --Commented out for use on the Papilio board so ROMs can be merged into the bitstream. Not enough BRAM to include this for the Papilio One.
+  u_program_wiz : entity work.ROM_PGM_1
+    port map (
+      CLK         => clk,
+      ENA         => ena_6,
+      ADDR        => cpu_addr(12 downto 0),
+      DATA        => program_rom_dinh
+      );
 
   --
   -- video subsystem
