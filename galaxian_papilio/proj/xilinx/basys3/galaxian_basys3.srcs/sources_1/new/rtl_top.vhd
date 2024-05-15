@@ -34,6 +34,7 @@ use IEEE.STD_LOGIC_1164.ALL;
 entity rtl_top is
     Port ( clk : in STD_LOGIC;
            sw : in STD_LOGIC_VECTOR (15 downto 0);
+           JA : in STD_LOGIC_VECTOR (4 downto 0);
            btnC : in STD_LOGIC;
            btnU : in STD_LOGIC;
            btnL : in STD_LOGIC;
@@ -72,12 +73,10 @@ begin
     --  I_SW[1] Down
     --  I_SW[0] Up
     --
-    reset <= btnC;
-    switches(1 downto 0) <= sw(1 downto 0);
-    switches(2) <= btnL; 
-    switches(3) <= btnR;
-    switches(4) <= btnU or btnD;
+    switches(4 downto 0) <= JA;
     switches(8 downto 5) <= sw(8 downto 5);
+
+    reset <= btnC;
 
     u_top : entity work.galaxian_top 
     port map (

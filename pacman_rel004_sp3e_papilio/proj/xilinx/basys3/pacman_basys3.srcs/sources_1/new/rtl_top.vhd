@@ -34,6 +34,7 @@ use IEEE.STD_LOGIC_1164.ALL;
 entity rtl_top is
     Port ( clk : in STD_LOGIC;
            sw : in STD_LOGIC_VECTOR (15 downto 0);
+           JA : in STD_LOGIC_VECTOR (4 downto 0);
            btnC : in STD_LOGIC;
            btnU : in STD_LOGIC;
            btnL : in STD_LOGIC;
@@ -51,7 +52,7 @@ entity rtl_top is
 end rtl_top;
 
 architecture Behavioral of rtl_top is
-    signal buttons : std_logic_vector(3 downto 0);
+    signal js0 : std_logic_vector(4 downto 0);
     signal reset : std_logic;
 begin
     --
@@ -67,7 +68,6 @@ begin
     -- gain pin is driven high there is a 6 dB gain, low is a 12 dB gain 
     O_PMODAMP2_GAIN <= sw(15);
 
-    buttons <= btnL & btnR & btnU & btnD;
     reset <= btnC;
 
     u_top : entity work.PACMAN 
@@ -81,7 +81,7 @@ begin
         O_AUDIO_L => O_PMODAMP2_AIN,
         O_AUDIO_R => open,
         --
-        I_JOYSTICK_A => sw(8 downto 4), -- sw(6) Right
+        I_JOYSTICK_A => JA, -- sw(8 downto 4),
         I_JOYSTICK_B => sw(13 downto 9), -- sw[13] low causes test mode
         --
         I_SW => sw(3 downto 0),

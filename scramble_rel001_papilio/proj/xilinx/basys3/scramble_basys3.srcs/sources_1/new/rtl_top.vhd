@@ -34,6 +34,7 @@ use IEEE.STD_LOGIC_1164.ALL;
 entity rtl_top is
     Port ( clk : in STD_LOGIC;
            sw : in STD_LOGIC_VECTOR (15 downto 0);
+           JA : in STD_LOGIC_VECTOR (4 downto 0);
            btnC : in STD_LOGIC;
            btnU : in STD_LOGIC;
            btnL : in STD_LOGIC;
@@ -52,6 +53,7 @@ end rtl_top;
 
 architecture Behavioral of rtl_top is
     signal buttons : std_logic_vector(3 downto 0);
+    signal switches : std_logic_vector(3 downto 0);
     signal reset : std_logic;
 begin
 
@@ -60,11 +62,6 @@ begin
     -- gain pin is driven high there is a 6 dB gain, low is a 12 dB gain 
     O_PMODAMP2_GAIN <= sw(15);
 
-    --buttons <= btnL & btnR & btnU & btnD;
-    buttons(3) <= btnL;
-    buttons(2) <= btnR;
-    buttons(1) <= btnU;
-    buttons(0) <= btnD;
     reset <= btnC;
 
     -- Scramble top-level inputs
@@ -72,10 +69,15 @@ begin
     -- sw(1)   Coin In
     -- sw(2)   Fi
     -- sw(3)   2 Player Start
-    -- btn(0)
-    -- btn(1)
-    -- btn(2)
-    -- btn(3)
+    -- btn(0)  Up
+    -- btn(1)  Down
+    -- btn(2)  Left
+    -- btn(3)  Right
+    buttons <= JA(4 downto 1);
+    switches(0) <= sw(0);
+    switches(1) <= sw(1);
+    switches(2) <= JA(0);
+    switches(3) <= sw(3);
 
     u_top : entity work.SCRAMBLE_TOP 
     port map (
@@ -88,9 +90,8 @@ begin
         O_AUDIO_L => O_PMODAMP2_AIN,
         O_AUDIO_R => open,
         --
-        I_SW => sw(3 downto 0),
+        I_SW => switches,
         I_BUTTON => buttons,
-        --JOYSTICK_GND => open,
         --
         I_RESET => reset,
         OSC_IN => clk

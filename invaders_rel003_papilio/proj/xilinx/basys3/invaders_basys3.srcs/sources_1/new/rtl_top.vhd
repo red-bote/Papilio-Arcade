@@ -34,6 +34,7 @@ use IEEE.STD_LOGIC_1164.ALL;
 entity rtl_top is
     Port ( clk : in STD_LOGIC;
            sw : in STD_LOGIC_VECTOR (15 downto 0);
+           JA : in STD_LOGIC_VECTOR (4 downto 0);
            btnC : in STD_LOGIC;
            btnU : in STD_LOGIC;
            btnL : in STD_LOGIC;
@@ -61,16 +62,18 @@ begin
     O_PMODAMP2_GAIN <= sw(15);
 
     reset <= btnC;
+
     -- Invaders top-level switch inputs
---    switches(0) <= sw(0); -- nop
---    switches(1) <= sw(1); -- nop
---    switches(2) <= btnL; -- left
---    switches(3) <= btnR; -- right
---    switches(4) <= btnU or btnD; -- fire
---    switches(5) <= sw(5); -- P2 start
---    switches(6) <= sw(6); -- coin
---    switches(7) <= sw(7); -- P1 start
-    switches <= sw(7 downto 0);
+    -- b(0) -- Nop
+    -- b(1) -- Nop
+    -- b(2) -- Left
+    -- b(3) -- Right
+    -- b(4) -- Fire
+    -- b(5) -- Player 2 start
+    -- b(6) -- Coin
+    -- b(7) -- Player 1 start
+    switches(4 downto 0) <= JA;
+    switches(7 downto 5) <= sw(7 downto 5);
 
     u_top : entity work.invaders_top 
     port map (
