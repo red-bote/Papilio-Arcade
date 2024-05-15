@@ -58,8 +58,10 @@ cat $rom_path_src/6e.cpu $rom_path_src/6f.cpu $rom_path_src/6h.cpu $rom_path_src
 
 #REM generate RTL code for small PROMS
 $romgen_path/romgen $rom_path_src/82s126.1m     PROM1_DST  9 l r e     > $rom_path/prom1_dst.vhd
-$romgen_path/romgen $rom_path_src/4a.cpu        PROM4_DST  8 l r e     > $rom_path/prom4_dst.vhd
+# PROM4 must be combinatorial otherwise the "left" of sprite lags 1 pixel strip and makes the halo over the sprites head
+$romgen_path/romgen $rom_path_src/4a.cpu        PROM4_DST  8 c          > $rom_path/prom4_dst.vhd
 $romgen_path/romgen $rom_path_src/7f.cpu        PROM7_DST  4 l r e     > $rom_path/prom7_dst.vhd
+
 
 #REM generate RAMB structures for larger ROMS
 $romgen_path/romgen $rom_path/gfx1.bin          GFX1      13 l r e > $rom_path/gfx1.vhd

@@ -43,7 +43,7 @@ cat $rom_path_src/pacman.6e $rom_path_src/pacman.6f $rom_path_src/pacman.6h $rom
 
 #REM generate RTL code for small PROMS
 $romgen_path/romgen $rom_path_src/pacman.1m    PROM1_DST  9 l r e  > $rom_path/prom1_dst.vhd
-$romgen_path/romgen $rom_path_src/pacman.4a    PROM4_DST  8 l r e  > $rom_path/prom4_dst.vhd
+$romgen_path/romgen $rom_path_src/pacman.4a    PROM4_DST  8 c      > $rom_path/prom4_dst.vhd
 $romgen_path/romgen $rom_path_src/pacman.7f    PROM7_DST  4 l r e  > $rom_path/prom7_dst.vhd
 
 #REM generate RAMB structures for larger ROMS

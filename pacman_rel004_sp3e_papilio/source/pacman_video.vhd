@@ -313,8 +313,8 @@ begin
 
   col_rom_4a : entity work.PROM4_DST
     port map (
-      CLK         => CLK,
-      ENA         => ENA_6,	 
+--      CLK         => CLK,
+--      ENA         => ENA_6,
       ADDR        => col_rom_addr,
       DATA        => lut_4a
       );

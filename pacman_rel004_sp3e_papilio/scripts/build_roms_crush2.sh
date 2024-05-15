@@ -55,7 +55,7 @@ cat $rom_path_src/tp1 $rom_path_src/tp5a $rom_path_src/tp2 $rom_path_src/tp6 $ro
 
 # REM generate RTL code for small PROMS
 $romgen_path/romgen $rom_path_src/82s126.1m     PROM1_DST  9 l r e     > $rom_path/prom1_dst.vhd
-$romgen_path/romgen $rom_path_src/2s140.4a      PROM4_DST  8 l r e     > $rom_path/prom4_dst.vhd
+$romgen_path/romgen $rom_path_src/2s140.4a      PROM4_DST  8 c         > $rom_path/prom4_dst.vhd
 $romgen_path/romgen $rom_path_src/82s123.7f     PROM7_DST  4 l r e     > $rom_path/prom7_dst.vhd
 
 # REM generate RAMB structures for larger ROMS

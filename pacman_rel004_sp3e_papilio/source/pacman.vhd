@@ -789,7 +789,10 @@ begin
       in1_reg(7) <= '1'; 							-- table 1-upright 0-cocktail
       in1_reg(6) <= not button_debounced(8); -- start2		RIGHT PushButton
       in1_reg(5) <= not button_debounced(5); -- start1		LEFT PushButton
-      in1_reg(4) <= button_debounced(13);		-- test and fire	
+
+--      in1_reg(4) <= button_debounced(13);		-- test and fire
+      in1_reg(4) <= button_debounced(4); -- RB: from joystick/JA
+
       in1_reg(3) <= button_debounced(10);		-- p2 down
 		if HWSEL_PACMANICMINERMAN = true		then		-- jump for pacmmm else 
 			in1_reg(2) <= button_debounced(4);

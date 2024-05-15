@@ -58,7 +58,7 @@ cat $rom_path_src/gorkans8.rom $rom_path_src/gorkans4.rom $rom_path_src/gorkans7
 
 #REM generate RTL code for small PROMS (note: gorkprom.2/PROM3_DST was omitted from .bat script)
 $romgen_path/romgen $rom_path_src/gorkprom.3    PROM1_DST  9 l r e  > $rom_path/prom1_dst.vhd  # 9 c
-$romgen_path/romgen $rom_path_src/gorkprom.1    PROM4_DST  8 l r e  > $rom_path/prom4_dst.vhd  # 8 c
+$romgen_path/romgen $rom_path_src/gorkprom.1    PROM4_DST  8 c      > $rom_path/prom4_dst.vhd  # 8 c
 $romgen_path/romgen $rom_path_src/gorkprom.4    PROM7_DST  4 l r e  > $rom_path/prom7_dst.vhd  # 4 c
 
 #REM generate RAMB structures for larger ROMS
