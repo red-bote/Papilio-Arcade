@@ -73,10 +73,15 @@ begin
     -- btn(1)  Down
     -- btn(2)  Left
     -- btn(3)  Right
-    buttons <= JA(4 downto 1);
+
+    buttons(0) <= JA(3); -- up
+    buttons(1) <= JA(2); -- down
+    buttons(2) <= JA(1); -- left
+    buttons(3) <= JA(0); -- right
+
     switches(0) <= sw(0);
     switches(1) <= sw(1);
-    switches(2) <= JA(0);
+    switches(2) <= JA(4);
     switches(3) <= sw(3);
 
     u_top : entity work.SCRAMBLE_TOP 

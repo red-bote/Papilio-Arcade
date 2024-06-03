@@ -63,6 +63,12 @@ begin
     --  I_SW(2) Coin
     --  I_SW(3) 2P Start
     --
+    js0(0) <= JA(3);
+    js0(1) <= JA(2);
+    js0(2) <= JA(1);
+    js0(3) <= JA(0);
+    js0(4) <= JA(4);
+
     -- active-low shutdown pin
     O_PMODAMP2_SHUTD <= sw(14);
     -- gain pin is driven high there is a 6 dB gain, low is a 12 dB gain 
@@ -81,7 +87,7 @@ begin
         O_AUDIO_L => O_PMODAMP2_AIN,
         O_AUDIO_R => open,
         --
-        I_JOYSTICK_A => JA, -- sw(8 downto 4),
+        I_JOYSTICK_A => js0, -- sw(8 downto 4),
         I_JOYSTICK_B => sw(13 downto 9), -- sw[13] low causes test mode
         --
         I_SW => sw(3 downto 0),

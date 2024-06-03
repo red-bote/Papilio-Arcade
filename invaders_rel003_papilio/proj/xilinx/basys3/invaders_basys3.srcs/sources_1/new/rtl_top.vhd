@@ -72,7 +72,11 @@ begin
     -- b(5) -- Player 2 start
     -- b(6) -- Coin
     -- b(7) -- Player 1 start
-    switches(4 downto 0) <= JA;
+    switches(0) <= JA(2); -- nop
+    switches(1) <= JA(3); -- nop
+    switches(2) <= JA(1); -- left
+    switches(3) <= JA(0); -- right
+    switches(4) <= JA(4); -- fire
     switches(7 downto 5) <= sw(7 downto 5);
 
     u_top : entity work.invaders_top 

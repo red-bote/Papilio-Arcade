@@ -73,7 +73,11 @@ begin
     --  I_SW[1] Down
     --  I_SW[0] Up
     --
-    switches(4 downto 0) <= JA;
+    switches(0) <= JA(3); -- up? (not sure needs checked)
+    switches(1) <= JA(2); -- down?  (not sure needs checked)
+    switches(2) <= JA(0); -- left
+    switches(3) <= JA(1); -- right
+    switches(4) <= JA(4); -- Jump/Shoot
     switches(8 downto 5) <= sw(8 downto 5);
 
     reset <= btnC;
